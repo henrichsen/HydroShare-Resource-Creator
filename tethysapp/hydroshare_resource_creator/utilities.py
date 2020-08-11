@@ -10,14 +10,14 @@ from django.http import HttpResponse
 from .app import HydroshareResourceCreator
 import csv
 import zipfile
-import StringIO
+import io
 import time
 import zipfile
 import os
 import dateutil.parser
 from datetime import datetime
 import collections
-import controllers
+from . import controllers
 import shutil
 import json
 
@@ -58,7 +58,7 @@ def time_str_to_datetime(t):
         t_datetime=parser.parse(t)
         return t_datetime
     except ValueError:
-        print "time_str_to_datetime error: "+ t
+        print ("time_str_to_datetime error: "+ t)
         raise Exception("time_str_to_datetime error: "+ t)
         return datetime.now()
 
@@ -165,8 +165,8 @@ def parse_1_0_and_1_1(root):
             Lon =None
             # iterate through xml document and read all values
 
-            # print "parsing values from water ml"
-            # print datetime.now()
+            # print ("parsing values from water ml")
+            # print (datetime.now())
 
             for element in root.iter():
                 bracket_lock = -1
@@ -204,7 +204,7 @@ def parse_1_0_and_1_1(root):
                         if 'definition' == tag or 'qualifierDescription'==tag:
                             quality = element.text
                         if 'methodDescription' == tag or 'MethodDescription'==tag:
-                            # print element.attrib['methodID']
+                            # print (element.attrib['methodID'])
                             method = element.text
                         if 'dataType' == tag :
                             datatype = element.text
@@ -303,7 +303,7 @@ def parse_1_0_and_1_1(root):
                             meta_dic['quality_code'].update({m_code1:m_code})
 
                     elif 'value' == tag:
-                        # print element.attrib
+                        # print (element.attrib)
                         try:
                             n = element.attrib['dateTimeUTC']
                         except:
@@ -377,7 +377,7 @@ def parse_1_0_and_1_1(root):
                             x_value.append(n)
                             y_value.append(v)
                             master_data_values[dic].append(v) #records only none null values for running statistics
-                            # print "hello"
+                            # print ("hello")
                             #master_values[dic].update({n:v})
                         master_values[dic].append(v)
                         master_times[dic].append(n)
@@ -460,15 +460,15 @@ def parse_1_0_and_1_1(root):
         else:
             parse_error = "Parsing error: The WaterML document doesn't appear to be a WaterML 1.0/1.1 time series"
             error_report("Parsing error: The WaterML document doesn't appear to be a WaterML 1.0/1.1 time series")
-            print parse_error
+            print (parse_error)
             return {
                 'status': parse_error
             }
-    except Exception, e:
+    except Exception as e:
         data_error = "Parsing error: The Data in the Url, or in the request, was not correctly formatted for water ml 1."
         error_report("Parsing error: The Data in the Url, or in the request, was not correctly formatted.")
-        print data_error
-        print e
+        print (data_error)
+        print (e)
         return {
             'status': data_error
         }
@@ -489,7 +489,7 @@ def findZippedUrl(page_request, res_id):
 
 
 def parse_2_0(root,wml_version):
-    print "running parse_2"
+    print ("running parse_2")
     try:
         if 'Collection' in root.tag:
             ts = etree.tostring(root)
@@ -572,9 +572,9 @@ def parse_2_0(root,wml_version):
 
                 item=[time_obj,val_obj]
                 for_highchart.append(item)
-            values = dict(zip(keys, vals))
+            values = dict(list(zip(keys, vals)))
 
-            for k, v in values.items():
+            for k, v in list(values.items()):
                 t = time_to_int(k)
                 for_graph.append({'x': t, 'y': float(v)})
             smallest_time = list(values.keys())[0]
@@ -616,10 +616,10 @@ def parse_2_0(root,wml_version):
                     'values':vals
                     }
         else:
-            print "Parsing error: The waterml document doesn't appear to be a WaterML 2.0 time series"
+            print ("Parsing error: The waterml document doesn't appear to be a WaterML 2.0 time series")
             return "Parsing error: The waterml document doesn't appear to be a WaterML 2.0 time series"
     except:
-        print "Parsing error: The Data in the Url, or in the request, was not correctly formatted."
+        print ("Parsing error: The Data in the Url, or in the request, was not correctly formatted.")
         return "Parsing error: The Data in the Url, or in the request, was not correctly formatted."
 
 
@@ -634,7 +634,7 @@ def Original_Checker(xml_file):
             return parse_1_0_and_1_1(root)
         elif wml_version == '2.0':
             return parse_2_0(root)
-    except ValueError, e:
+    except ValueError as e:
         return read_error_file(xml_file)
     except:
         return read_error_file(xml_file)
@@ -649,7 +649,7 @@ def read_error_file(xml_file):
 
 
 def unzip_waterml(request, res_id,src):
-    # print "unzip!!!!!!!"
+    # print ("unzip!!!!!!!")
 
     # this is where we'll unzip the waterML file to
     temp_dir = get_workspace()
@@ -669,9 +669,9 @@ def unzip_waterml(request, res_id,src):
         url_zip = 'http://' + request.META['HTTP_HOST'] + '/apps/data-cart/showfile/'+res_id
     r = requests.get(url_zip, verify=False)
     try:
-        z = zipfile.ZipFile(StringIO.StringIO(r.content))
+        z = zipfile.ZipFile(io.StringIO(r.content))
         file_list = z.namelist()
-        print file_list
+        print (file_list)
         try:
             for file in file_list:
                 if 'hydroshare' in src:
@@ -701,23 +701,23 @@ def unzip_waterml(request, res_id,src):
 
         # checks to see if data is an xml
         except etree.XMLSyntaxError as e:
-            print "Error:Not XML"
+            print ("Error:Not XML")
             return False
 
         # checks to see if Url is valid
-        except ValueError, e:
-            print "Error:invalid Url"
+        except ValueError as e:
+            print ("Error:invalid Url")
             return False
 
         # checks to see if xml is formatted correctly
-        except TypeError, e:
-            print "Error:string indices must be integers not str"
+        except TypeError as e:
+            print ("Error:string indices must be integers not str")
             return False
 
     # check if the zip file is valid
     except zipfile.BadZipfile as e:
         error_message = "Bad Zip File"
-        print "Bad Zip file"
+        print ("Bad Zip file")
         return False
 
     # finally we return the waterml_url
@@ -763,7 +763,7 @@ def create_ts_layer_resource(title):
     outFile = open(file_temp_name, 'w')
     doc.write(outFile)
 def append_ts_layer_resource(title,metadata):
-    print metadata
+    print (metadata)
     lon = metadata['Lon']
     lat = metadata['Lat']
 
@@ -772,15 +772,15 @@ def append_ts_layer_resource(title,metadata):
     # URL = metadata['URL']
     returntype = metadata['ReturnType']
 
-    # print "adding to file"
+    # print ("adding to file")
     temp_dir = get_workspace()
     file_temp_name = temp_dir + '/hydroshare/' + title + '.xml'
-    print file_temp_name
+    print (file_temp_name)
     tree = etree.parse(file_temp_name)
 
     root = tree.getroot()
 
-    print root
+    print (root)
     REFTS = etree.SubElement(root,'REFTS')
 
     RefType = etree.SubElement(REFTS,"RefTye")
@@ -826,11 +826,11 @@ def get_hydroshare_resource(request,res_id,data_for_chart):
                 if 'xml' in file:
                     data_file = data_dir + file
                     with open(data_file, 'r') as f:
-                        # print f.read()
+                        # print (f.read())
                         data = f.read()
-                        # print data
+                        # print (data)
                         f.close()
-                        print data
+                        print (data)
                         try:
                             data= data.decode('latin-1')
                         except:
@@ -843,23 +843,23 @@ def get_hydroshare_resource(request,res_id,data_for_chart):
         # resource = hs.getResourceList(user ='editor')
         resource = hs.getResourceList(owner = user1)
         for  res in resource:
-            # print res
+            # print (res)
             id = res["resource_id"]
-            # print id
+            # print (id)
             if(res_id ==res["resource_id"]):
                 is_owner = True
     except Exception as inst:
         data_for_chart = 'You are not authorized to access this resource'
         owner = False
         error = True
-        print 'start'
+        print ('start')
         print(type(inst))
         print(inst.args)
         try:
             data_for_chart = str(inst)
         except:
             data_for_chart = "There was an error loading data for resource"+res_id
-        print "end"
+        print ("end")
     data_dic = {"data":data_for_chart,"owner":is_owner,"error":error}
     return data_dic
 def parse_JSON():

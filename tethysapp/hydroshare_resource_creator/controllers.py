@@ -8,7 +8,7 @@ from django.conf import settings
 from wsgiref.util import FileWrapper
 import os
 from datetime import datetime
-import utilities
+from . import utilities
 from hs_restclient import HydroShare, HydroShareAuthOAuth2, HydroShareNotAuthorized, HydroShareNotFound
 from oauthlib.oauth2 import TokenExpiredError
 from suds.transport import TransportError
@@ -58,7 +58,7 @@ def home(request):
         login1 = 'True'
     else:
         login1 ='False'
-    print request.body
+    print (request.body)
 
     body = request.body
     try:
@@ -100,9 +100,9 @@ def chart_data(request,res_id):
     #parse xml data from 'data' from data_for_js and prepare for the table
     if res_id =='None':
         data = utilities.parse_JSON()
-        print type(data)
-        print "ddddddddddddddddddddddddddddddddd"
-        print data
+        print (type(data))
+        print ("ddddddddddddddddddddddddddddddddd")
+        print (data)
 
         try:
 
@@ -110,7 +110,7 @@ def chart_data(request,res_id):
             data1 = json.loads(data1)
         except:
             data1=''
-        print data1
+        print (data1)
         if data1=='':
                 try:
                     data1 = data['timeSeriesLayerResource']
@@ -118,7 +118,7 @@ def chart_data(request,res_id):
                     data1=''
 
         # data_n = urllib.unquote(data1).decode(encoding ="UTF-8")
-        # print data_n
+        # print (data_n)
         if data1 =='':
             error = "No data in file"
         else:
@@ -146,7 +146,7 @@ def chart_data(request,res_id):
                     if  'wml_1_' in file:
                         data_file = data_dir + file
                         with open(data_file, 'r') as f:
-                            # print f.read()
+                            # print (f.read())
                             file_data = f.read()
                             f.close()
                             file_temp_name = temp_dir + '/id/' + res_id + '.xml'
@@ -157,9 +157,9 @@ def chart_data(request,res_id):
                         data_file = data_dir +file
                         with open(data_file, 'r') as f:
                             file_data = f.read()
-                            print file_data
+                            print (file_data)
                             data = file_data.encode(encoding ='UTF-8')
-                            print data
+                            print (data)
                             data1 = json.loads(data)
                             data1 = data1['timeSeriesLayerResource']
 
@@ -231,12 +231,12 @@ def response(request):
     # variable_code = 'ODM:Discharge'
     variable_code = 'NWISDV:00060'
     client = connect_wsdl_url(service_url)
-    # print client
+    # print (client)
     start_date =''
     end_date = ''
     auth_token = ''
     response1 = client.service.GetValues(site_code, variable_code, start_date, end_date, auth_token)
-    print response1
+    print (response1)
 
     response= urllib2.urlopen('http://hiscentral.cuahsi.org/webservices/hiscentral.asmx/GetWaterOneFlowServiceInfo')
     html = response.read()
@@ -249,8 +249,8 @@ def response(request):
     service_url = utilities.parse_service_info(file_temp_name)
     # service_url = 'http://hiscentral.cuahsi.org/webservices/hiscentral.asmx?WSDL'
     # client = connect_wsdl_url(service_url)
-    # print client
-    # print response1
+    # print (client)
+    # print (response1)
     # response1 = {"File uploaded":"sucess"}
     # base_path = utilities.get_workspace()+"/hydroshare"
     # file_path = base_path + "/" +title
@@ -270,13 +270,13 @@ def create_layer(request,fun_type,res_id):
     res_access = str(request.POST.get('resAccess'))
     keywords = keywords.split(',')
     str_resource = request.POST.get('checked_ids')
-    print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa"
-    print str_resource
+    print ("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
+    print (str_resource)
     str_resource = trim(str_resource)
 
     for res in str_resource:
         int_resource.append(int(res))
-    print int_resource
+    print (int_resource)
     metadata = []
     if use_hs_client_helper:
 	    hs = get_oauth_hs(request)
@@ -286,12 +286,12 @@ def create_layer(request,fun_type,res_id):
     file_name = title.replace(" ", "")
     file_path = temp_dir + '/id/timeseriesLayerResource.json.refts'
     fpath = temp_dir + '/id/'+file_name+'.json.refts'
-    print fpath
+    print (fpath)
     with open(file_path, 'r') as outfile:
         file_data = outfile.read()
         data = file_data.encode(encoding ='UTF-8')
         data = json.loads(data)
-        print data
+        print (data)
         data = data['timeSeriesLayerResource']
         try:
             data_symbol = data['symbol']
@@ -316,20 +316,20 @@ def create_layer(request,fun_type,res_id):
     r_keywords = (keywords)
     r_abstract = abstract
 
-    print res_id
+    print (res_id)
     if fun_type =='create':
         try:
-            print "creating resource"
+            print ("creating resource")
             resource_id = hs.createResource(r_type, r_title, resource_file=fpath, keywords=r_keywords, abstract=r_abstract, metadata=metadata)
         except:
             resource_id ="error"
     elif fun_type =='update':
         try:
-            print "Updating resource"
+            print ("Updating resource")
             try:
                 resource_id = hs.deleteResourceFile(res_id, fpath+'.json.refts')
             except:
-                print 'file doesnt exist'
+                print ('file doesnt exist')
             resource_id = hs.addResourceFile(res_id, fpath)
         except:
             resource_id ="error"
@@ -387,7 +387,7 @@ def test(request):
     except:
         pass
 
-    print result
+    print (result)
 
     context ={"result": json.dumps(result)
                }

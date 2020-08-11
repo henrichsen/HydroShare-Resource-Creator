@@ -1,20 +1,12 @@
 from lxml import etree
-from lxml.builder import E
 import numpy
 import requests
-import time
-from datetime import timedelta
 from dateutil import parser
-from django.http import HttpResponse
 
 from .app import HydroshareResourceCreator
-import csv
-import zipfile
 import io
-import time
 import zipfile
 import os
-import dateutil.parser
 from datetime import datetime
 import collections
 from . import controllers
@@ -58,7 +50,7 @@ def time_str_to_datetime(t):
         t_datetime=parser.parse(t)
         return t_datetime
     except ValueError:
-        print ("time_str_to_datetime error: "+ t)
+        print(("time_str_to_datetime error: "+ t))
         raise Exception("time_str_to_datetime error: "+ t)
         return datetime.now()
 
@@ -70,7 +62,7 @@ def time_to_int(t):
         t_sec_str=d.strftime('%s')
         return int(t_sec_str)
     except ValueError:
-        print ("time_to_int error: "+ t)
+        print(("time_to_int error: "+ t))
         raise Exception('time_to_int error: ' + t)
 
 def parse_service_info(xml_file):
@@ -853,8 +845,8 @@ def get_hydroshare_resource(request,res_id,data_for_chart):
         owner = False
         error = True
         print ('start')
-        print(type(inst))
-        print(inst.args)
+        print((type(inst)))
+        print((inst.args))
         try:
             data_for_chart = str(inst)
         except:

@@ -6,7 +6,7 @@ app_package = 'hydroshare_resource_creator'
 release_package = 'tethysapp-' + app_package
 
 ### Python Dependencies ###
-dependencies = ['simplejson']
+dependencies = ['simplejson','lxml']
 # -- Get Resource File -- #
 resource_files = find_resource_files('tethysapp/' + app_package + '/templates', 'tethysapp/' + app_package)
 resource_files += find_resource_files('tethysapp/' + app_package + '/public', 'tethysapp/' + app_package)

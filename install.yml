@@ -10,6 +10,7 @@ requirements:
     channels:
     packages:
       - simplejson
+      - lxml
 
   pip:
 

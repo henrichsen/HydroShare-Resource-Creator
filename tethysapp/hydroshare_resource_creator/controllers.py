@@ -1,5 +1,3 @@
-from django.shortcuts import render
-import requests
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.http import HttpResponse
@@ -7,18 +5,15 @@ from django.shortcuts import render
 from django.conf import settings
 from wsgiref.util import FileWrapper
 import os
-from datetime import datetime
 from . import utilities
 from hs_restclient import HydroShare, HydroShareAuthOAuth2, HydroShareNotAuthorized, HydroShareNotFound
-from oauthlib.oauth2 import TokenExpiredError
 from suds.transport import TransportError
 from suds.client import Client
 from xml.sax._exceptions import SAXParseException
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
-import urllib2
-import urllib
+import urllib.request, urllib.error, urllib.parse
 import json
 import logging
 import shutil
@@ -58,7 +53,7 @@ def home(request):
         login1 = 'True'
     else:
         login1 ='False'
-    print (request.body)
+    print((request.body))
 
     body = request.body
     try:
@@ -100,7 +95,7 @@ def chart_data(request,res_id):
     #parse xml data from 'data' from data_for_js and prepare for the table
     if res_id =='None':
         data = utilities.parse_JSON()
-        print (type(data))
+        print((type(data)))
         print ("ddddddddddddddddddddddddddddddddd")
         print (data)
 
@@ -238,7 +233,7 @@ def response(request):
     response1 = client.service.GetValues(site_code, variable_code, start_date, end_date, auth_token)
     print (response1)
 
-    response= urllib2.urlopen('http://hiscentral.cuahsi.org/webservices/hiscentral.asmx/GetWaterOneFlowServiceInfo')
+    response= urllib.request.urlopen('http://hiscentral.cuahsi.org/webservices/hiscentral.asmx/GetWaterOneFlowServiceInfo')
     html = response.read()
 
     temp_dir = utilities.get_workspace()

@@ -21,7 +21,8 @@
   <component name="ChangeListManager">
     <list default="true" id="0159a467-9ea1-416a-a2e1-1190ff65c86f" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tethysapp/hydroshare_resource_creator/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/tethysapp/hydroshare_resource_creator/utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tethysapp/hydroshare_resource_creator/controllers.py" beforeDir="false" afterPath="$PROJECT_DIR$/tethysapp/hydroshare_resource_creator/controllers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tethysapp_hydroshare_resource_creator.egg-info/requires.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tethysapp_hydroshare_resource_creator.egg-info/requires.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +127,10 @@
       <updated>1462216892009</updated>
       <workItem from="1597159406963" duration="775000" />
       <workItem from="1597160229881" duration="2833000" />
-      <workItem from="1597166102508" duration="2486000" />
+      <workItem from="1597166102508" duration="7637000" />
+      <workItem from="1597268212139" duration="2000" />
+      <workItem from="1597346673424" duration="1252000" />
+      <workItem from="1597440348813" duration="69000" />
     </task>
     <task id="LOCAL-00001" summary="fix structure">
       <created>1597159925553</created>
@@ -149,7 +153,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597166163287</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="style update">
+      <created>1597180721039</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1597180721039</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -179,17 +190,18 @@
     <MESSAGE value="fix structure" />
     <MESSAGE value="initail py 2 to 3 fix" />
     <MESSAGE value="fix imports" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix imports" />
+    <MESSAGE value="style update" />
+    <option name="LAST_COMMIT_MESSAGE" value="style update" />
   </component>
   <component name="WindowStateProjectService">
     <state x="104" y="23" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597178056959">
       <screen x="0" y="23" width="1280" height="623" />
     </state>
     <state x="104" y="23" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1280.623/1280.0.1280.720@0.23.1280.623" timestamp="1597178056959" />
-    <state x="0" y="74" key="Vcs.Push.Dialog.v2" timestamp="1597159935737">
+    <state x="0" y="74" key="Vcs.Push.Dialog.v2" timestamp="1597180731968">
       <screen x="0" y="23" width="1280" height="623" />
     </state>
-    <state x="0" y="74" key="Vcs.Push.Dialog.v2/0.23.1280.623/1280.0.1280.720@0.23.1280.623" timestamp="1597159935737" />
+    <state x="0" y="74" key="Vcs.Push.Dialog.v2/0.23.1280.623/1280.0.1280.720@0.23.1280.623" timestamp="1597180731968" />
     <state x="694" y="23" width="586" height="623" key="find.popup" timestamp="1597159831704">
       <screen x="0" y="23" width="1280" height="623" />
     </state>
